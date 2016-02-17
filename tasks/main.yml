@@ -1,0 +1,47 @@
+# mysql/tasks/main.yml
+---
+
+  - name: General | Install required packages.
+    action: apt pkg={{ item }} state=installed update_cache=yes
+    with_items:
+      - "{{ mysql_version | default('mysql-server') }}"
+      # plugin python necessaire pour creer les databases
+      - python-mysqldb
+    register: pkgInstall
+
+
+  - name: MySQL | Configuration file, my.cnf
+    action: template src=etc-mysql-my-cnf.j2 dest=/etc/mysql/my.cnf force=yes
+    register: templateConf
+
+  - include: mysql-secure.yml
+
+  - name: Restart MySQL
+    action: service name=mysql state=restarted
+    when: pkgInstall|changed or templateConf|changed
+
+# Create Database if needed
+
+  - name: Mysql Databases to be created
+    debug: var=mysql_databases
+    when: mysql_databases is defined
+
+  - name: Create databases
+    mysql_db: name="{{ item.db_schema }}" state=present login_user="root" login_password="{{ mysql_root_password }}"
+    with_items: mysql_databases
+    when: mysql_databases is defined
+
+  - name: Create user and grant privileges
+    mysql_user: name="{{ item.db_user }}" password="{{ item.db_password }}" host="%" priv="{{ item.db_schema }}.*:ALL,GRANT" state=present login_user="root" login_password="{{ mysql_root_password }}"
+    with_items: mysql_databases
+    when: mysql_databases is defined
+
+  - name: Create user and grant privileges
+    mysql_user: name="{{ item.name }}" password="{{ item.password }}" host="{{ item.host }}" priv="{{ item.priv }}" state=present login_user="root" login_password="{{ mysql_root_password }}"
+    with_items: mysql_users
+    when: mysql_users is defined
+
+  - include: restore_dump.yml
+    when: mysql_databases is defined
+    tags: restore_db
+
