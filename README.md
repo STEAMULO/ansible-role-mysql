@@ -139,3 +139,11 @@ Benno Joy
 
 STEAMULO - http://www.steamulo.com
 
+DISCLAMER
+---------
+
+Please notice that all trademarks are properties of their respective companies.
+
+Ansible roles provided by STEAMULO are only tools to fetch and install software from legitimate origins.
+
+All roles are provided "AS IS". Please refer to license.
