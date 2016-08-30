@@ -53,13 +53,13 @@ bind-address		= {{ mysql_bind_address }}
 #
 # * Fine Tuning
 #
-key_buffer		= 16M
+key_buffer_size		= 16M
 max_allowed_packet	= {{ mysql_max_allowed_packet }}
 thread_stack		= 192K
 thread_cache_size       = 8
 # This replaces the startup script and checks MyISAM tables if needed
 # the first time they are touched
-myisam-recover         = BACKUP
+#myisam-recover         = BACKUP
 #max_connections        = 100
 #table_cache            = 64
 #thread_concurrency     = 10

@@ -5,9 +5,6 @@ forceRestoreDB: false
 
 mysql_port: 3306
 
-# Version d'installation
-mysql_version: 'mysql-server-5.6'
-
 # Hostname is important as we need to delete an anonymous MySQL
 # user that is created with this name, make sure you match this
 # up.
