@@ -1,0 +1,9 @@
+---
+
+- hosts: vagrant-machine
+  name: Test mysql role
+  become: true
+  vars:
+    - mysql_version: mysql-server-5.6
+  roles:
+    - ../../ansible-role-mysql
