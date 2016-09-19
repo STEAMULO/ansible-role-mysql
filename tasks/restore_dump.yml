@@ -13,7 +13,7 @@
     with_items: testDumpExists.results
 
   - name: Retrieve dump
-    get_url: url="{{ item.item.dump_to_restore }}" dest="/tmp/" force=yes owner={{ ssh_account }} group={{ ssh_account }}
+    get_url: url="{{ item.item.dump_to_restore }}" dest="/tmp/" force=yes
     when: item.item.dump_to_restore is defined and not item.stat.exists
     with_items: testDumpExists.results
     register: getDump
