@@ -1,8 +1,10 @@
 # mysql/tasks/main.yml
 ---
 
-  - name: Add mysql 5.6 ppa for Ubuntu xenial
-    apt_repository: repo='deb http://repo.mysql.com/apt/ubuntu/ xenial mysql-5.6' state=present
+  - name: Add mysql 5.6 unofficial ppa for Ubuntu xenial
+    apt_repository: repo='{{ item }}' state=present
+    with_items:
+      - "ppa:ondrej/mysql-5.6"
     when: ansible_distribution_release == "xenial" and mysql_version == "mysql-server-5.6"
 
   - name: General | Install required packages.
