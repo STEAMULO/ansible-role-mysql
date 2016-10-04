@@ -6,6 +6,13 @@
 #
   - name: MySQL | Set the root password.
     action: mysql_user user=root password={{ mysql_root_password }} host=localhost login_user="root" login_password="{{ mysql_root_password }}"
+    register: root_pwd_reg
+    ignore_errors: True
+    tags: common
+
+  - name: MySQL | Set the root password without pwd (first time).
+    action: mysql_user user=root password={{ mysql_root_password }} host=localhost login_user="root" login_password=""
+    when: root_pwd_reg.failed
     tags: common
 
   - name: MySQL | Config for easy access as root user
