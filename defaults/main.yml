@@ -1,17 +1,15 @@
 ---
 
-# doit on forcer le restore de la database même si le dump est deja present ?
-forceRestoreDB: false
+# if mysql is already installed, don't try to do it again (galera cluster case)
+mysql_skip_install: false
 
-mysql_port: 3306
 
-# Hostname is important as we need to delete an anonymous MySQL
-# user that is created with this name, make sure you match this
-# up.
-server_hostname: 'steamysql'
-user: 'steamulo'
+# should the dumps be restored even if they're already downloaded
+force_restore_db: false
 
 # my.cnf
+mysql_port: 3306
+# mysql_bind_address
 mysql_max_allowed_packet: '128M'
 mysql_character_set_server: 'utf8'
 mysql_collation_server: 'utf8_general_ci'
@@ -19,8 +17,5 @@ mysql_collation_server: 'utf8_general_ci'
 # mysql
 mysql_root_password: ''
 
-#mysql_bind_address:
-
-
-
+mysql_users: []
 

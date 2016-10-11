@@ -5,5 +5,6 @@
   become: true
   vars:
     - mysql_version: mysql-server-5.6
+    - mysql_root_password: toto
   roles:
     - ../../ansible-role-mysql

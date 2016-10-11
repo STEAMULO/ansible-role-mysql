@@ -1,0 +1,47 @@
+---
+##
+# MySQL database setup, this does the equivalent of mysql_secure_installation.
+#
+# Distribution independent.
+#
+  - name: MySQL | Set the root password for all hosts
+    mysql_user:
+      user: "root"
+      password: "{{ mysql_root_password }}"
+      host: "localhost"
+      login_user: "root"
+      login_password: "{{ mysql_root_password }}"
+    register: root_pwd_reg
+    ignore_errors: True
+
+  - name: MySQL | Set the root password without pwd for all hosts (first time).
+    mysql_user:
+      user: "root"
+      password: "{{ mysql_root_password }}"
+      host: "localhost"
+      login_user: "root"
+      login_password: ""
+    when: root_pwd_reg.failed is defined and root_pwd_reg.failed
+
+  - name: MySQL | Config for easy access as root user
+    template: src=.my.cnf.j2 dest=/root/.my.cnf
+
+  - name: MySQL | Delete anonymous MySQL server user for all hosts
+    mysql_user: user="" host_all=yes state="absent" login_user="root" login_password="{{ mysql_root_password }}"
+
+  - name: MySQL | Secure the MySQL root user for IPV6 localhost (::1)
+    action: mysql_user user="root" password="{{ mysql_root_password }}" host="::1" login_user="root" login_password="{{ mysql_root_password }}"
+    tags: common
+
+  - name: MySQL | Secure the MySQL root user for IPV4 localhost (127.0.0.1)
+    action: mysql_user user="root" password="{{ mysql_root_password }}" host="127.0.0.1" login_user="root" login_password="{{ mysql_root_password }}"
+
+  - name: MySQL | Secure the MySQL root user for localhost domain (localhost)
+    action: mysql_user user="root" password="{{ mysql_root_password }}" host="localhost" login_user="root" login_password="{{ mysql_root_password }}"
+
+  - name: MySQL | Delete the MySQL root user for {{ ansible_nodename }} domain
+    action: mysql_user user="root" password="{{ mysql_root_password }}" host="{{ ansible_nodename }}" login_user="root" login_password="{{ mysql_root_password }}" state=absent
+
+  - name: MySQL | Remove the MySQL test database
+    mysql_db: db=test state=absent login_user="root" login_password="{{ mysql_root_password }}"
+    ignore_errors: true

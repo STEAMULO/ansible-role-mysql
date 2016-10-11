@@ -27,14 +27,6 @@ them are as follows:
       mysql_bind_address: "0.0.0.0"    # The bind address for mysql server
       mysql_root_db_pass: foobar       # The root DB password
 
-      # A list that has all the databases to be
-      # created and their replication status:
-      mysql_db:                                 
-           - name: foo
-             replicate: yes
-           - name: bar
-             replicate: no
-
       # A list of the mysql users to be created
       # and their password and privileges:
       mysql_users:                              
