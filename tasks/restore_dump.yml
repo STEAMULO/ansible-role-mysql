@@ -2,20 +2,20 @@
 ---
   - stat: path=/tmp/{{ item.dump_to_restore | basename }}
     when: item.dump_to_restore is defined
-    with_items: mysql_databases
+    with_items: "{{ mysql_databases }}"
     register: testDumpExists
 
 #  - debug: var=testDumpExists
 
   - name: Restore dump already there
     mysql_db: name="{{ item.item.db_schema }}" state=import target="/tmp/{{ item.item.dump_to_restore | basename }}" login_user="root" login_password="{{ mysql_root_password }}"
-    when: item.stat.exists and forceRestoreDB is defined and forceRestoreDB
-    with_items: testDumpExists.results
+    when: item.stat.exists and force_restore_db is defined and force_restore_db
+    with_items: "{{ testDumpExists.results }}"
 
   - name: Retrieve dump
     get_url: url="{{ item.item.dump_to_restore }}" dest="/tmp/" force=yes
     when: item.item.dump_to_restore is defined and not item.stat.exists
-    with_items: testDumpExists.results
+    with_items: "{{ testDumpExists.results }}"
     register: getDump
 
 #  - debug: var=getDump
@@ -23,5 +23,5 @@
   - name: Restore dump download
     mysql_db: name="{{ item.item.item.db_schema }}" state=import target="{{ item.dest }}" login_user="root" login_password="{{ mysql_root_password }}"
     when: item.dest is defined
-    with_items: getDump.results
+    with_items: "{{ getDump.results }}"
 
