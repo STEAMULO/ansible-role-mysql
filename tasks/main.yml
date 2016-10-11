@@ -15,5 +15,5 @@
     tags: mysql_restore_db
 
   - include: restore_dump.yml
-    when: mysql_databases is defined
+    when: mysql_databases is defined and not mysql_skip_dump
     tags: mysql_restore_db

@@ -2,7 +2,8 @@
 
 # if mysql is already installed, don't try to do it again (galera cluster case)
 mysql_skip_install: false
-
+# skip restore dump even if url is present (for a cluster for example)
+mysql_skip_dump: false
 
 # should the dumps be restored even if they're already downloaded
 force_restore_db: false

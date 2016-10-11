@@ -11,17 +11,8 @@
       host: "localhost"
       login_user: "root"
       login_password: "{{ mysql_root_password }}"
+      check_implicit_admin: yes
     register: root_pwd_reg
-    ignore_errors: True
-
-  - name: MySQL | Set the root password without pwd for all hosts (first time).
-    mysql_user:
-      user: "root"
-      password: "{{ mysql_root_password }}"
-      host: "localhost"
-      login_user: "root"
-      login_password: ""
-    when: root_pwd_reg.failed is defined and root_pwd_reg.failed
 
   - name: MySQL | Config for easy access as root user
     template: src=.my.cnf.j2 dest=/root/.my.cnf
