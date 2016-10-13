@@ -3,10 +3,6 @@
 
 # Create Database if needed
 
-  - name: Mysql Databases to be created
-    debug: var=mysql_databases
-    when: mysql_databases is defined
-
   - name: Create databases
     mysql_db: name="{{ item.db_schema }}" state=present login_user="root" login_password="{{ mysql_root_password }}"
     with_items: "{{ mysql_databases }}"
