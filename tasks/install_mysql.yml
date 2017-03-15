@@ -5,7 +5,7 @@
     apt_repository: repo='{{ item }}' state=present
     with_items:
       - "ppa:ondrej/mysql-5.6"
-    when: ansible_distribution_release == "xenial" and mysql_version == "mysql-server-5.6"
+    when: ansible_distribution_release == "xenial" and mysql_version | default('') == "mysql-server-5.6"
 
   - name: General | Install required packages.
     action: apt pkg={{ item }} state=installed update_cache=yes
